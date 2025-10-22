@@ -1,24 +1,9 @@
 #!/bin/bash
 
-# For Error Messages
-PrintRed () {
-	echo -e "\e[31m${1}\e[0m"
-}
+source ../colors.sh
 
-# For Success Messages
-PrintGreen () {
-	echo -e "\e[32m${1}\e[0m"
-}
 
-# For Neutral Status / Task Updates
-PrintLightBlue () {
-	echo -e "\e[94m${1}\e[0m"
-}
 
-# For User Input
-PrintCyan () {
-	echo -e "\e[36m${1}\e[0m"
-}
 
 PrintLightBlue "APT Sources Page"
 PrintCyan "What version APT sources do you want? (1/2)
@@ -31,20 +16,12 @@ PrintCyan "What version APT sources do you want? (1/2)
 "
 read version
 
-if [ $version -eq 1 ]
-then
-	meld ./config-files/updates/mint-sources.list /etc/apt/sources.list
-fi
+case $version in
+    1)meld ./config-files/updates/mint-sources.list /etc/apt/sources.list;;
+    2)meld ./config-files/updates/ubuntu-sources.list /etc/apt/sources.list;;
+    4)meld ./config-files/updates/ubuntu-18-sources.list /etc/apt/sources.list;;
+esac
 
-if [ $version -eq 2 ]
-then
-	meld ./config-files/updates/ubuntu-sources.list /etc/apt/sources.list
-fi
-
-if [ $version -eq 4 ]
-then
-	meld ./config-files/updates/ubuntu-18-sources.list /etc/apt/sources.list
-fi
 
 chmod 644 /etc/apt/sources.list
 
@@ -53,6 +30,7 @@ PrintGreen "APT Sources List Complete"
 PrintLightBlue "Updating the System"
 apt update -y
 apt upgrade -y
+apt full-upgrade -y
 apt dist-upgrade -y
 apt autoclean
 apt autoremove

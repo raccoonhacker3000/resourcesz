@@ -1,32 +1,11 @@
 #!/bin/bash
 
-# For Error Messages
-PrintRed () {
-	echo -e "\e[31m${1}\e[0m"
-}
-
-# For Success Messages
-PrintGreen () {
-	echo -e "\e[32m${1}\e[0m"
-}
-
-# For Neutral Status / Task Updates
-PrintLightBlue () {
-	echo -e "\e[94m${1}\e[0m"
-}
-
-# For User Input
-PrintCyan () {
-	echo -e "\e[36m${1}\e[0m"
-}
+source ./colors.sh
 
 chmod -R a=rwx ./tests/
 apt install meld
 
-
-x=1
-
-while [ $x -eq 1 ]
+while [ true ]
 do
 	PrintLightBlue "Recommended Order:
 	(1) Backups
@@ -40,7 +19,7 @@ do
 	(8) Antimalware
 	(9) Kernel
 	(10) Firewall
-	(11) PAM
+	(11) PAM-Privileged Access Management
 	(12) Critical Services
 	(13) Permissions
 	(14) Auditd
@@ -48,74 +27,23 @@ do
 	PrintCyan "Which Option to Run:  "
 	read option
 
-	if [ "$option" -eq 1 ]
-	then
-		./tests/backups.sh
-	fi
+	case "$option" in
+    	1)  ./tests/backups.sh ;;
+    	2)  ./tests/baseline.sh ;;
+    	3)  ./tests/users.sh ;;
+    	4)  ./tests/updates.sh ;;
+    	5)  ./tests/prune-services.sh ;;
+    	6)  ./tests/unauth-material.sh ;;
+    	7)  ./tests/backdoor.sh ;;
+    	8)  ./tests/antimalware.sh ;;
+    	9)  ./tests/kernel.sh ;;
+    	10) ./tests/firewall.sh ;;
+    	11) ./tests/pam.sh ;;
+    	12) ./tests/critical-services.sh ;;
+    	13) ./tests/permissions.sh ;;
+    	14) ./tests/auditd.sh ;;
+    	*)  echo "Invalid option" ;;
+	esac
 
-	if [ "$option" -eq 2 ]
-	then
-		./tests/baseline.sh
-	fi
-
-	if [ "$option" -eq 3 ]
-	then
-		./tests/users.sh
-	fi
-
-	if [ "$option" -eq 4 ]
-	then
-		./tests/updates.sh
-	fi
-
-	if [ "$option" -eq 5 ]
-	then
-		./tests/prune-services.sh
-	fi
-
-	if [ "$option" -eq 6 ]
-	then
-		./tests/unauth-material.sh
-	fi
-
-	if [ "$option" -eq 7 ]
-	then
-		./tests/backdoor.sh
-	fi
-
-	if [ "$option" -eq 8 ]
-	then
-		./tests/antimalware.sh
-	fi
-
-	if [ "$option" -eq 9 ]
-	then
-		./tests/kernel.sh
-	fi
-
-	if [ "$option" -eq 10 ]
-	then
-		./tests/firewall.sh
-	fi
-
-	if [ "$option" -eq 11 ]
-	then
-		./tests/pam.sh
-	fi
-
-	if [ "$option" -eq 12 ]
-	then
-		./tests/critical-services.sh
-	fi
-
-	if [ "$option" -eq 13 ]
-	then
-		./tests/permissions.sh
-	fi
-
-	if [ "$option" -eq 14 ]
-	then
-		./tests/auditd.sh
-	fi
 
 done
