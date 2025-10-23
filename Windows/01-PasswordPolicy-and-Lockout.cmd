@@ -1,6 +1,6 @@
 :: Run as Administrator
 :: Password policy
-net accounts /minpwlen:11 /maxpwage:60 /minpwage:1 /uniquepw:5
+net accounts /minpwlen:14 /maxpwage:60 /minpwage:1 /uniquepw:5
 
 :: Account lockout (approximate via acct lockout policies)
 net accounts /lockoutthreshold:5
