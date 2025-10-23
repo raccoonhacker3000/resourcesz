@@ -1,6 +1,24 @@
 #!/bin/bash
 
-source ../colors.sh
+# For Error Messages
+PrintRed () {
+	echo -e "\e[31m${1}\e[0m"
+}
+
+# For Success Messages
+PrintGreen () {
+	echo -e "\e[32m${1}\e[0m"
+}
+
+# For Neutral Status / Task Updates
+PrintLightBlue () {
+	echo -e "\e[94m${1}\e[0m"
+}
+
+# For User Input
+PrintCyan () {
+	echo -e "\e[36m${1}\e[0m"
+}
 
 PrintLightBlue "User Auditing"
 echo "Calculating..."
@@ -53,12 +71,12 @@ do
 done
 
 PrintCyan "Look through /etc/passwd for UIDs <1000 or ==0"
-vim /etc/passwd
+gedit /etc/passwd
 read REPLY
 PrintGreen "Odd UIDs secured"
 
 PrintCyan "Look through /etc/group for groups that should not exist"
-vim /etc/group
+gedit /etc/group
 read REPLY
 PrintGreen "Odd groups secured"
 

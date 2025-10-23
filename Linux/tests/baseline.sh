@@ -1,6 +1,24 @@
 #!/bin/bash
 
-source ../colors.sh
+# For Error Messages
+PrintRed () {
+	echo -e "\e[31m${1}\e[0m"
+}
+
+# For Success Messages
+PrintGreen () {
+	echo -e "\e[32m${1}\e[0m"
+}
+
+# For Neutral Status / Task Updates
+PrintLightBlue () {
+	echo -e "\e[94m${1}\e[0m"
+}
+
+# For User Input
+PrintCyan () {
+	echo -e "\e[36m${1}\e[0m"
+}
 
 PrintLightBlue "Debsums Baseline"
 mkdir ./output/debsums
@@ -11,12 +29,7 @@ PrintCyan "Copy-Paste missing files into the file that opened."
 cat ./output/debsums/sums.txt | grep -v "OK" > ./output/debsums/errors.txt
 touch ./output/debsums/missing-files.txt
 echo "Copy-Paste debsums missing files here!" > ./output/debsums/missing-files.txt
-if [ -s ./output/debsums/errors.txt ]; then
-    PrintRed "there are missing files"
-    gedit ./output/debsums/missing-files.txt
-else
-    PrintGreen "No missing or altered files found"
-fi
+gedit ./output/debsums/missing-files.txt
 
 PrintCyan "Each file that is different has been edited from default, most likely containing vulnerabilities.
 ./output/debsums/sums.txt
