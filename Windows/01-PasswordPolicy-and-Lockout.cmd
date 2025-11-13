@@ -1,55 +1,56 @@
-@echo off
-echo =======================================================
-echo     CyberPatriot Password + Lockout Policy Script
-echo =======================================================
+Write-Host "======================================================="
+Write-Host " CyberPatriot Password + Lockout Policy Script (PS1)"
+Write-Host "======================================================="
 
-:: ---------------------------------------------------------
-:: 1) PASSWORD POLICY  (Net Accounts)
-:: ---------------------------------------------------------
-echo [1/3] Applying net accounts password policy...
+# ---------------------------------------------------------
+# 1) Basic Password Policy via net accounts
+# ---------------------------------------------------------
+Write-Host "[1/3] Applying net accounts password policy..."
 
-rem Minimum password length: 14
-rem Maximum password age: 60 days
-rem Minimum password age: 1 day
-rem Password history: 5
-net accounts /minpwlen:14 /maxpwage:60 /minpwage:1 /uniquepw:5
+net accounts /minpwlen:14 /maxpwage:60 /minpwage:1 /uniquepw:5 /lockoutthreshold:5
 
-echo Password policy via net accounts applied.
+Write-Host "Net accounts policies applied."
 
 
-:: ---------------------------------------------------------
-:: 2) PASSWORD POLICY (LGPO.exe - required for complexity)
-:: ---------------------------------------------------------
-echo [2/3] Applying password complexity + reversible encryption...
+# ---------------------------------------------------------
+# 2) Build security template (INF file)
+# ---------------------------------------------------------
+Write-Host "[2/3] Creating temporary security template..."
 
-:: Require password complexity (Uppercase + Lowercase + Number + Symbol)
-lgpo.exe /t passwordpolicy /v "PasswordComplexity" /d 1
+$inf = @"
+[Version]
+signature=`"$CHICAGO$`"
+Revision=1
 
-:: Disable storing passwords using reversible encryption
-lgpo.exe /t passwordpolicy /v "ClearTextPassword" /d 0
+[System Access]
+PasswordComplexity=1
+ClearTextPassword=0
+LockoutBadCount=5
+LockoutDuration=30
+ResetLockoutCount=30
+"@
 
-echo Complexity + reversible encryption applied.
+$inf | Out-File -FilePath "cp_security.inf" -Encoding ASCII
 
-
-:: ---------------------------------------------------------
-:: 3) ACCOUNT LOCKOUT POLICY (LGPO.exe)
-:: ---------------------------------------------------------
-echo [3/3] Applying account lockout settings...
-
-:: Lockout threshold (also set by net accounts, but LGPO ensures UI sync)
-lgpo.exe /t lockoutpolicy /v "LockoutBadCount" /d 5
-
-:: Lockout duration: 30 minutes
-lgpo.exe /t lockoutpolicy /v "LockoutDuration" /d 30
-
-:: Reset lockout counter after: 30 minutes
-lgpo.exe /t lockoutpolicy /v "ResetLockoutCount" /d 30
-
-echo Account lockout policy applied.
+Write-Host "Security template created."
 
 
-echo =======================================================
-echo   DONE! All settings have been applied.
-echo   Verify in secpol.msc -> Account Policies
-echo =======================================================
-pause
+# ---------------------------------------------------------
+# 3) Apply template using secedit
+# ---------------------------------------------------------
+Write-Host "[3/3] Applying template with secedit..."
+
+secedit /configure /db cp_security.sdb /cfg cp_security.inf /overwrite
+
+Write-Host "Security template applied."
+
+
+# ---------------------------------------------------------
+# Cleanup
+# ---------------------------------------------------------
+Remove-Item cp_security.inf -Force -ErrorAction SilentlyContinue
+Remove-Item cp_security.sdb -Force -ErrorAction SilentlyContinue
+
+Write-Host "======================================================="
+Write-Host " DONE! Check secpol.msc → Account Policies"
+Write-Host "======================================================="
