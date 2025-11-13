@@ -14,13 +14,10 @@ PrintGreen "Auditd Started!"
 
 PrintLightBlue "Configuring Settings and Rules"
 
-meld /etc/audit/auditd.conf ./config-files/auditd/auditd.conf
-
 rm -r /etc/audit/rules.d/*
 
-meld /etc/audit/audit.rules ./config-files/auditd/audit.rules
-
 augenrules
+
 
 echo "GRUB_CMDLINE_LINUX=\"audit=1\"" >>  /etc/default/grub
 

@@ -1,0 +1,37 @@
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/sda3 during installation
+UUID=f7c6d035-8acf-4e61-94ff-c93f1db7f1fc /               ext4    errors=remount-ro 0       1
+# /boot/efi was on /dev/sda2 during installation
+UUID=F7BD-294A  /boot/efi       vfat    umask=0077      0       1
+/swapfile                                 none            swap    sw              0       0
+/dev/fd0        /media/floppy0  auto    rw,user,noauto,exec,utf8 0       0
+
+# /tmp
+tmpfs	/tmp	tmpfs	defaults,rw,nosuid,nodev,noexec,relatime,seclabel,size=2G	0	0
+
+# /var
+#UUID=<ROOT_UUID>	/var	ext4	defaults,rw,nosuid,nodev,relatime	0	0
+
+# /var/tmp
+UUID=<ROOT_UUID>	/var/tmp	ext4	 rw,nosuid,nodev,noexec,relatime,seclabel	0	0
+
+# /var/log
+UUID=<ROOT_UUID>	/var/log	ext4	 defaults,rw,nosuid,nodev,noexec,relatime	0	0
+
+# /var/log/audit
+UUID=<ROOT_UUID>	/var/log/audit	ext4	defaults,rw,nosuid,nodev,noexec,relatime	0	0
+
+# /proc
+proc	/proc	proc	defaults,hidepid=2	0	0
+
+# /dev/shm
+tmpfs	/dev/shm	tmpfs	rw,nosuid,nodev,noexec,relatime,seclabel	0	0
+
+# /run/shm
+none	/run/shm	tmpfs	defaults,ro	0	0
