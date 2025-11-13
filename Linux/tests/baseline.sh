@@ -1,24 +1,6 @@
 #!/bin/bash
 
-# For Error Messages
-PrintRed () {
-	echo -e "\e[31m${1}\e[0m"
-}
-
-# For Success Messages
-PrintGreen () {
-	echo -e "\e[32m${1}\e[0m"
-}
-
-# For Neutral Status / Task Updates
-PrintLightBlue () {
-	echo -e "\e[94m${1}\e[0m"
-}
-
-# For User Input
-PrintCyan () {
-	echo -e "\e[36m${1}\e[0m"
-}
+source ./colors.sh
 
 PrintLightBlue "Debsums Baseline"
 mkdir ./output/debsums
@@ -34,7 +16,7 @@ gedit ./output/debsums/missing-files.txt
 PrintCyan "Each file that is different has been edited from default, most likely containing vulnerabilities.
 ./output/debsums/sums.txt
 ./output/debsums/errors.txt
-./output/debsums/missing-files.txt"
+./output/debsums/missing-files.txt" \n==============================================================\n[Press Enter]\n==============================================================
 read REPLY
 
 PrintGreen "Debsums Complete!"
@@ -91,7 +73,6 @@ PrintCyan "Network Listens:  ./output/lynis-baseline/network-listens.txt"
 cat ./output/lynis-baseline/report.dat | grep -E 'cronjob' | sed -e 's/cronjob\[\]=//g' > /lynis-baseline/cronjobs.txt
 PrintCyan "Cronjobs:  ./output/lynis-baseline/cronjobs.txt"
 
-read REPLY
 PrintGreen "Lynis Baseline Complete!"
 
 
@@ -110,6 +91,6 @@ mkdir ./output/lunar-baseline
 ./output/lunar/lunar.sh -A -n > ./output/lunar-baseline/report.txt
 cat -n ./output/lunar-baseline/report.txt | grep "Warning:" > ./output/lunar-baseline/warnings.txt
 PrintCyan "Report: ./output/lunar-baseline/report.txt
-Warnings (with report line # reference): ./output/lunar-baseline/warnings.txt"
+Warnings (with report line # reference): ./output/lunar-baseline/warnings.txt \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
 PrintGreen "LUNAR Complete!"

@@ -1,24 +1,6 @@
 #!/bin/bash
 
-# For Error Messages
-PrintRed () {
-	echo -e "\e[31m${1}\e[0m"
-}
-
-# For Success Messages
-PrintGreen () {
-	echo -e "\e[32m${1}\e[0m"
-}
-
-# For Neutral Status / Task Updates
-PrintLightBlue () {
-	echo -e "\e[94m${1}\e[0m"
-}
-
-# For User Input
-PrintCyan () {
-	echo -e "\e[36m${1}\e[0m"
-}
+source ./colors.sh
 
 
 PrintCyan "Disable IPv6 (y/n)?  "
@@ -34,7 +16,7 @@ net.ipv6.conf.lo.disable_ipv6 = 1" >> /etc/sysctl.conf
 	then
 		PrintCyan "/etc/default/grub
 	# add => ipv6.disable=1 to GRUB_CMDLINE_LINUX
-	GRUB_CMDLINE_LINUX=\"ipv6.disable=1\""
+	GRUB_CMDLINE_LINUX=\"ipv6.disable=1\" \n==============================================================\n[Press Enter]\n=============================================================="
 		read REPLY
 	fi
 	update-grub
@@ -54,7 +36,7 @@ sysctl -p
 systemctl daemon-reload
 PrintGreen "All SystemCTL Policies Updated"
 
-PrintCyan "Ensure only 1 IP interface exists"
+PrintCyan "Ensure only 1 IP interface exists \n==============================================================\n[Press Enter]\n=============================================================="
 ip address
 read REPLY
 

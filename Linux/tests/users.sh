@@ -1,24 +1,6 @@
 #!/bin/bash
 
-# For Error Messages
-PrintRed () {
-	echo -e "\e[31m${1}\e[0m"
-}
-
-# For Success Messages
-PrintGreen () {
-	echo -e "\e[32m${1}\e[0m"
-}
-
-# For Neutral Status / Task Updates
-PrintLightBlue () {
-	echo -e "\e[94m${1}\e[0m"
-}
-
-# For User Input
-PrintCyan () {
-	echo -e "\e[36m${1}\e[0m"
-}
+source ./colors.sh
 
 PrintLightBlue "User Auditing"
 echo "Calculating..."
@@ -70,25 +52,25 @@ do
 	fi
 done
 
-PrintCyan "Look through /etc/passwd for UIDs <1000 or ==0"
-gedit /etc/passwd
+PrintCyan "Look through /etc/passwd for UIDs <1000 or == 0 \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
+gedit /etc/passwd
 PrintGreen "Odd UIDs secured"
 
-PrintCyan "Look through /etc/group for groups that should not exist"
-gedit /etc/group
+PrintCyan "Look through /etc/group for groups that should not exist  \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
+gedit /etc/group
 PrintGreen "Odd groups secured"
 
-PrintCyan "These are empty passwords, none should appear if passwords were applied correctly:"
-mawk -F: '$2 == ""' /etc/passwd
+PrintCyan "These are empty passwords, none should appear if passwords were applied correctly: \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
+mawk -F: '$2 == ""' /etc/passwd
+
 PrintGreen "Empty passwords secured"
 
-PrintCyan "Configure /etc/sudoers based on scenario requirements and ./config-files/users/sudoers"
+PrintCyan "Configure /etc/sudoers based on scenario requirements and ./config-files/users/sudoers \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
 visudo
-read REPLY
 PrintGreen "Sudo rights controlled"
 
 PrintLightBlue "Lock root in case it hasn't been already"
@@ -99,7 +81,7 @@ PrintLightBlue "Adduser Default Home Directory Permissions"
 meld ./config-files/users/adduser.conf /etc/adduser.conf
 PrintGreen "Adduser Default Home Directory Set"
 
-PrintCyan "Verify Each home directory is owned by the correct user and that user's group:"
+PrintCyan "Verify Each home directory is owned by the correct user and that user's group: \n==============================================================\n[Press Enter]\n=============================================================="
 ls -la /home
 read REPLY
 PrintGreen "Home Dirs Secured"
@@ -110,7 +92,7 @@ read yn
 if [ "$yn" = "y" ]
 then
 	meld ./config-files/users/lightdm.conf /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
-	PrintCyan "Look through other lightdm related files to remove conflicting entries"
+	PrintCyan "Look through other lightdm related files to remove conflicting entries \n==============================================================\n[Press Enter]\n=============================================================="
 	ls -R /usr/share/lightdm/lightdm.conf.d
 	read REPLY
 	systemctl restart lightdm.service

@@ -1,24 +1,6 @@
 #!/bin/bash
 
-# For Error Messages
-PrintRed () {
-	echo -e "\e[31m${1}\e[0m"
-}
-
-# For Success Messages
-PrintGreen () {
-	echo -e "\e[32m${1}\e[0m"
-}
-
-# For Neutral Status / Task Updates
-PrintLightBlue () {
-	echo -e "\e[94m${1}\e[0m"
-}
-
-# For User Input
-PrintCyan () {
-	echo -e "\e[36m${1}\e[0m"
-}
+source ./colors.sh
 
 PrintLightBlue "APT Sources Page"
 PrintCyan "What version APT sources do you want? (1/2)
@@ -62,10 +44,10 @@ PrintGreen "System Updates Complete"
 
 PrintLightBlue "Graphical Software Updates"
 
-PrintCyan "Check Graphical Software Installer for Updates. (Press Enter when complete)"
+PrintCyan "Check Graphical Software Installer for Updates. \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
 
-PrintCyan "Check Updates Daily in Software Updates App. (Press Enter when complete)"
+PrintCyan "Check Updates Daily in Software Updates App. \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
 
 PrintGreen "Graphical Updates Complete"
@@ -80,7 +62,7 @@ PrintGreen "OpenSSL Heartbleed Bug Patched"
 
 PrintLightBlue "APT Keys"
 apt-key list
-PrintCyan "Verify each key is valid. Remove bad ones. (Press Enter when complete)"
+PrintCyan "Verify each key is valid. Remove bad ones. \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
 
 PrintGreen "APT Keys Secured"

@@ -1,24 +1,6 @@
 #!/bin/bash
 
-# For Error Messages
-PrintRed () {
-	echo -e "\e[31m${1}\e[0m"
-}
-
-# For Success Messages
-PrintGreen () {
-	echo -e "\e[32m${1}\e[0m"
-}
-
-# For Neutral Status / Task Updates
-PrintLightBlue () {
-	echo -e "\e[94m${1}\e[0m"
-}
-
-# For User Input
-PrintCyan () {
-	echo -e "\e[36m${1}\e[0m"
-}
+source ./colors.sh
 
 
 PrintLightBlue "Common Permissions"
@@ -153,7 +135,7 @@ chown root:root /var/tmp
 
 PrintGreen "Common Permissions Fixed"
 
-PrintCyan "Resolve World Writable Files:"
+PrintCyan "Resolve World Writable Files: \n==============================================================\n[Press Enter]\n=============================================================="
 find / -xdev -perm +o=w ! \( -type d -perm +o=t \) ! -type l -print
 read REPLY
 PrintGreen "World Writable Files Resolved"
@@ -161,17 +143,17 @@ PrintGreen "World Writable Files Resolved"
 PrintCyan "Resolve Unowned Files:"
 PrintLightBlue "No user"
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser
-PrintLightBlue "No group"
+PrintLightBlue "No group \n==============================================================\n[Press Enter]\n=============================================================="
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -r '{}' find '{}' -xdev -nogroup
 read REPLY
 PrintGreen "Unowned Files Resolved"
 
-PrintCyan "Resolve SUID Executables"
+PrintCyan "Resolve SUID Executables \n==============================================================\n[Press Enter]\n=============================================================="
 df --local -P | awk {'if (NR!=1)print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -4000
 read REPLY
 PrintGreen "SUID Executables Resolved"
 
-PrintCyan "Resolve SGID Executables"
+PrintCyan "Resolve SGID Executables \n==============================================================\n[Press Enter]\n=============================================================="
 df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -2000
 read REPLY
 PrintGreen "SGID Executables Resolved"
@@ -179,7 +161,7 @@ PrintGreen "SGID Executables Resolved"
 PrintCyan "Resolve Immutable Files"
 lsattr -l -R > ./output/lsattr_output.txt
 clear
-PrintCyan "Resolve Immutable Files"
+PrintCyan "Resolve Immutable Files \n==============================================================\n[Press Enter]\n=============================================================="
 grep " Immutable" ./output/lsattr_output.txt
 read REPLY
 PrintGreen "Immutable Files Resolved"
@@ -189,7 +171,7 @@ PrintLightBlue "Files in /etc not owned by root"
 ls -la /etc | grep -v "root"
 PrintLightBlue "Scripts in /etc"
 ls -la /etc | grep ".sh"
-PrintLightBlue "Text Files in /etc"
+PrintLightBlue "Text Files in /etc \n==============================================================\n[Press Enter]\n=============================================================="
 ls -la /etc | grep ".txt"
 read REPLY
 PrintGreen "Sus Files Voted Out"
@@ -213,7 +195,7 @@ aideinit
 mv /var/lib/aide/aide.db.new /var/lib/aide/aide.db
 
 PrintCyan "Add this line to root's crontab (hit enter to access) to regularly run AIDE checks:
-	0 5 * * * /usr/bin/aide.wrapper --config /etc/aide/aide.conf --check"
+	0 5 * * * /usr/bin/aide.wrapper --config /etc/aide/aide.conf --check \n==============================================================\n[Press Enter]\n=============================================================="
 read REPLY
 crontab -u root -e
 
